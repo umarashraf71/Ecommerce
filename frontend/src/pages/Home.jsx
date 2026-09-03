@@ -67,7 +67,7 @@ function Home() {
         <div className="hero-overlay"></div>
 
         <div className="hero-content">
-          <p className="hero-small-text">NEW COLLECTION 2026</p>
+          <p className="hero-small-text">ShopEase 2026</p>
 
           <h1>
             Discover Products
