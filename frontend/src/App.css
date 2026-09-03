@@ -4205,3 +4205,447 @@ body {
 .delete-btn:hover {
   background-color: #b91c1c;
 }
+
+.status-active{
+  background-color: rgb(13, 194, 13);
+  padding: 5px 10px;
+  color: white;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.status-inactive{
+  background-color: rgb(250, 26, 26);
+  padding: 5px 10px;
+  color: white;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+
+
+
+/* ================================
+   Add Category Page
+================================ */
+
+.form-container {
+  max-width: 600px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+}
+
+
+/* Form Group */
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+
+/* Input */
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #555;
+}
+
+
+/* Buttons Container */
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+
+/* Save Button */
+
+.save-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #222;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background: #000;
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* Cancel Button */
+
+.cancel-btn {
+  padding: 10px 18px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #f5f5f5;
+}
+
+
+/* Error Message */
+
+.error-message {
+  color: #d32f2f;
+  background: #fdecec;
+  padding: 10px 12px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+  .form-container {
+    padding: 18px;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+
+}
+
+
+
+
+/* =========================================
+   Generic CRUD / Listing Page
+========================================= */
+
+.crud-page {
+  width: 100%;
+}
+
+
+/* =========================================
+   Page Header
+========================================= */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  color: #222;
+}
+
+
+/* =========================================
+   Add Button
+========================================= */
+
+.add-btn {
+  display: inline-block;
+  padding: 10px 16px;
+  background: #222;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.add-btn:hover {
+  background: #000;
+}
+
+
+/* =========================================
+   Table Container
+========================================= */
+
+.table-container {
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================================
+   Generic CRUD Table
+========================================= */
+
+.crud-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+
+/* Table Header */
+
+.crud-table thead {
+  background: #f5f5f5;
+}
+
+.crud-table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+
+/* Table Body */
+
+.crud-table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #555;
+  border-bottom: 1px solid #eee;
+}
+
+
+/* Remove border from last row */
+
+.crud-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* Row Hover */
+
+.crud-table tbody tr:hover {
+  background: #fafafa;
+}
+
+
+/* =========================================
+   Status
+========================================= */
+
+.status-active {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-inactive {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #ffebee;
+  color: #c62828;
+}
+
+
+/* =========================================
+   Action Buttons
+========================================= */
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+
+/* Common button style */
+
+.edit-btn,
+.delete-btn,
+.activate-btn,
+.deactivate-btn {
+  padding: 7px 12px;
+  border-radius: 5px;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  display: inline-block;
+}
+
+
+/* Edit */
+
+.edit-btn {
+  background: #eeeeee;
+  color: #333;
+}
+
+.edit-btn:hover {
+  background: #ddd;
+}
+
+
+/* Delete */
+
+.delete-btn {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.delete-btn:hover {
+  background: #ffcdd2;
+}
+
+
+/* Activate */
+
+.activate-btn {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.activate-btn:hover {
+  background: #c8e6c9;
+}
+
+
+/* Deactivate */
+
+.deactivate-btn {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.deactivate-btn:hover {
+  background: #ffe0b2;
+}
+
+
+/* =========================================
+   Loading
+========================================= */
+
+.loading-message {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+}
+
+
+/* =========================================
+   Error Message
+========================================= */
+
+.error-message {
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  background: #fdecec;
+  color: #d32f2f;
+  font-size: 14px;
+}
+
+
+/* =========================================
+   Empty Table
+========================================= */
+
+.empty-message {
+  text-align: center;
+  padding: 30px !important;
+  color: #777;
+}
+
+
+/* =========================================
+   Responsive
+========================================= */
+
+@media (max-width: 768px) {
+
+  .page-header {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .page-header h1 {
+    font-size: 22px;
+  }
+
+  .add-btn {
+    white-space: nowrap;
+  }
+
+  .crud-table {
+    min-width: 650px;
+  }
+
+}
+
+
+/* =========================================
+   Small Screens
+========================================= */
+
+@media (max-width: 500px) {
+
+  .page-header {
+    flex-direction: column;
+  }
+
+  .add-btn {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+}
+

@@ -15,6 +15,8 @@ import ProductsList from "./pages/admin/products/ProductsList";
 import CategoryList from "./pages/admin/category/CategoryList";
 import OrdersList from "./pages/admin/orders/OrdersList";
 import RoleRoute from "./layouts/RoleRoute";
+import AddCategory from "./pages/admin/category/AddCategory";
+import EditCategory from "./pages/admin/category/EditCategory";
 
 import {
   createBrowserRouter,
@@ -113,6 +115,15 @@ function App() {
             {
               path: "/dashboard/categories",
               element: <CategoryList />,
+            },
+
+            {
+              path: "/dashboard/categories/add",
+              element: <AddCategory />,
+            },
+            {
+              path: "/dashboard/categories/edit/:id",
+              element: <EditCategory />,
             },
 
           ],
