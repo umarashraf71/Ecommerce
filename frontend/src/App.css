@@ -4649,3 +4649,630 @@ body {
 
 }
 
+/* =========================================
+   CHECKOUT PAGE
+========================================= */
+
+.checkout-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding-bottom: 60px;
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.checkout-page .container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* =========================================
+   CHECKOUT HEADER
+========================================= */
+
+.checkout-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 30px 0;
+  margin-bottom: 35px;
+}
+
+.checkout-header h1 {
+  margin: 15px 0 0;
+  font-size: 32px;
+  color: #222;
+}
+
+
+/* =========================================
+   BREADCRUMB
+========================================= */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #777;
+}
+
+.breadcrumb a {
+  color: #555;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: #000;
+}
+
+.breadcrumb span {
+  color: #999;
+}
+
+
+/* =========================================
+   CHECKOUT LAYOUT
+========================================= */
+
+.checkout-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 30px;
+  align-items: start;
+}
+
+
+/* =========================================
+   LEFT SIDE
+========================================= */
+
+.checkout-left {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+
+/* =========================================
+   CHECKOUT SECTION
+========================================= */
+
+.checkout-section {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 25px;
+}
+
+.section-header {
+  margin-bottom: 22px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 21px;
+  color: #222;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 46px;
+  padding: 0 13px;
+  border: 1px solid #d7d7d7;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #222;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #222;
+}
+
+.form-group input::placeholder {
+  color: #aaa;
+}
+
+
+/* =========================================
+   FORM ROW
+========================================= */
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+
+/* =========================================
+   PAYMENT OPTIONS
+========================================= */
+
+.payment-option {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-option:last-child {
+  margin-bottom: 0;
+}
+
+.payment-option:hover {
+  border-color: #999;
+}
+
+.payment-option.active {
+  border-color: #222;
+  background: #fafafa;
+}
+
+
+/* =========================================
+   PAYMENT OPTION HEADER
+========================================= */
+
+.payment-option-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.payment-option-header input[type="radio"] {
+  margin-top: 4px;
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+}
+
+.payment-option-header h3 {
+  margin: 0 0 5px;
+  font-size: 16px;
+  color: #222;
+}
+
+.payment-option-header p {
+  margin: 0;
+  font-size: 13px;
+  color: #777;
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   CARD PAYMENT
+========================================= */
+
+.card-payment-info {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.card-payment-info .form-group {
+  margin-bottom: 15px;
+}
+
+.card-payment-info input:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+  color: #999;
+}
+
+.payment-note {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #777;
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+
+.checkout-error {
+  padding: 14px 16px;
+  background: #fff0f0;
+  border: 1px solid #f0b5b5;
+  border-radius: 6px;
+  color: #c62828;
+  font-size: 14px;
+}
+
+
+/* =========================================
+   PLACE ORDER BUTTON
+========================================= */
+
+.place-order-btn {
+  width: 100%;
+  height: 52px;
+  border: none;
+  border-radius: 7px;
+  background: #222;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.place-order-btn:hover {
+  background: #000;
+}
+
+.place-order-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   RIGHT SIDE
+========================================= */
+
+.checkout-right {
+  position: sticky;
+  top: 20px;
+}
+
+
+/* =========================================
+   ORDER SUMMARY
+========================================= */
+
+.order-summary {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 25px;
+}
+
+.order-summary > h2 {
+  margin: 0 0 22px;
+  font-size: 21px;
+  color: #222;
+}
+
+
+/* =========================================
+   SUMMARY ITEMS
+========================================= */
+
+.summary-items {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+
+/* =========================================
+   SUMMARY ITEM
+========================================= */
+
+.summary-item {
+  display: grid;
+  grid-template-columns: 65px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+
+/* =========================================
+   SUMMARY ITEM IMAGE
+========================================= */
+
+.summary-item-image {
+  position: relative;
+  width: 65px;
+  height: 65px;
+}
+
+.summary-item-image img {
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e5e5e5;
+  display: block;
+}
+
+
+/* =========================================
+   QUANTITY BADGE
+========================================= */
+
+.item-quantity {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 21px;
+  height: 21px;
+  padding: 0 5px;
+  border-radius: 50%;
+  background: #222;
+  color: #ffffff;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   SUMMARY ITEM DETAILS
+========================================= */
+
+.summary-item-details {
+  min-width: 0;
+}
+
+.summary-item-details h3 {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summary-item-details p {
+  margin: 0;
+  font-size: 12px;
+  color: #888;
+}
+
+
+/* =========================================
+   SUMMARY ITEM PRICE
+========================================= */
+
+.summary-item-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  white-space: nowrap;
+}
+
+
+/* =========================================
+   SUMMARY CALCULATION
+========================================= */
+
+.summary-calculation {
+  padding-top: 20px;
+}
+
+
+/* =========================================
+   SUMMARY ROW
+========================================= */
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  font-size: 14px;
+  color: #555;
+}
+
+.summary-row span:last-child {
+  font-weight: 500;
+  color: #222;
+}
+
+
+/* =========================================
+   FREE SHIPPING MESSAGE
+========================================= */
+
+.free-shipping-message {
+  margin: -5px 0 15px;
+  font-size: 12px;
+  color: #2e7d32;
+}
+
+
+/* =========================================
+   SUMMARY TOTAL
+========================================= */
+
+.summary-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  margin-top: 5px;
+  border-top: 1px solid #e5e5e5;
+  font-size: 18px;
+  color: #222;
+}
+
+.summary-total strong {
+  font-size: 22px;
+}
+
+
+/* =========================================
+   BACK TO CART
+========================================= */
+
+.back-to-cart {
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.back-to-cart:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================================
+   EMPTY CART
+========================================= */
+
+.empty-cart {
+  width: 90%;
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 50px 30px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.empty-cart h2 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  color: #222;
+}
+
+.empty-cart p {
+  margin: 0 0 25px;
+  color: #777;
+  font-size: 14px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  background: #222;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #000;
+}
+
+
+/* =========================================
+   RESPONSIVE - TABLET
+========================================= */
+
+@media (max-width: 900px) {
+
+  .checkout-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .checkout-right {
+    position: static;
+  }
+
+  .order-summary {
+    margin-top: 0;
+  }
+}
+
+
+/* =========================================
+   RESPONSIVE - MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .checkout-page .container {
+    width: 94%;
+  }
+
+  .checkout-header {
+    padding: 22px 0;
+    margin-bottom: 20px;
+  }
+
+  .checkout-header h1 {
+    font-size: 26px;
+  }
+
+  .checkout-section {
+    padding: 18px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .checkout-layout {
+    gap: 20px;
+  }
+
+  .order-summary {
+    padding: 18px;
+  }
+
+  .summary-item {
+    grid-template-columns: 55px minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+
+  .summary-item-image,
+  .summary-item-image img {
+    width: 55px;
+    height: 55px;
+  }
+
+  .summary-item-details h3 {
+    font-size: 13px;
+  }
+
+  .summary-item-price {
+    font-size: 13px;
+  }
+
+  .place-order-btn {
+    height: 48px;
+  }
+}

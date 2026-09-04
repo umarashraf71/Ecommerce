@@ -17,6 +17,8 @@ import OrdersList from "./pages/admin/orders/OrdersList";
 import RoleRoute from "./layouts/RoleRoute";
 import AddCategory from "./pages/admin/category/AddCategory";
 import EditCategory from "./pages/admin/category/EditCategory";
+import AddProduct from "./pages/admin/products/AddProduct";
+import EditProduct from "./pages/admin/products/EditProduct";
 
 import {
   createBrowserRouter,
@@ -124,6 +126,19 @@ function App() {
             {
               path: "/dashboard/categories/edit/:id",
               element: <EditCategory />,
+            },
+            {
+              path: "/dashboard/products",
+              element: <ProductsList />,
+            },
+
+            {
+              path: "/dashboard/products/add",
+              element: <AddProduct />,
+            },
+            {
+              path: "/dashboard/products/edit/:id",
+              element: <EditProduct />,
             },
 
           ],

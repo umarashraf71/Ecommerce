@@ -58,8 +58,7 @@ const createCategory = async (req, res) => {
 const getCategories = async (req, res) => {
   try {
 
-    const categories = await Category.find()
-      .sort({ _id: -1 });
+    const categories = await Category.find().sort({ _id: -1 });
 
 
     res.status(200).json({
@@ -132,7 +131,7 @@ const updateCategoryStatus = async (req, res) => {
       return res.status(404).json({ message: 'Category not found' });
     }
 
-    category.status = req.body.status === 'activate' ? true : false;
+    category.status = req.body.status;
     await category.save();
 
     res.status(200).json({

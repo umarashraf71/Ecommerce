@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import api from "../utils/api.js";
 import { useCart } from "../context/CartContext";
 
-
 function Checkout() {
+  const navigate = useNavigate();
 
-  const {cartItems} = useCart();
+  const {
+    cartItems,
+    clearCart,
+  } = useCart();
+
   const [paymentMethod, setPaymentMethod] = useState("cod");
 
   const [formData, setFormData] = useState({
@@ -20,14 +25,12 @@ function Checkout() {
     postalCode: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const [placingOrder, setPlacingOrder] = useState(false);
+  const [orderError, setOrderError] = useState("");
 
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // --------------------------------
+  // Calculate Order Summary
+  // --------------------------------
 
   const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -38,103 +41,269 @@ function Checkout() {
 
   const total = subtotal + shipping;
 
-  const handleSubmit = (e) => {
+  // --------------------------------
+  // Handle Input Change
+  // --------------------------------
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // --------------------------------
+  // Handle Payment Method
+  // --------------------------------
+
+  const handlePaymentMethod = (method) => {
+    setPaymentMethod(method);
+  };
+
+  // --------------------------------
+  // Place Order
+  // --------------------------------
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Checkout Data:", {
-      customer: formData,
-      paymentMethod,
-      cartItems,
-      subtotal,
-      shipping,
-      total,
-    });
+    setOrderError("");
 
-    alert("Order placed successfully!");
+    // Check cart
+    if (cartItems.length === 0) {
+      setOrderError("Your cart is empty.");
+      return;
+    }
+
+    // Basic frontend validation
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.address ||
+      !formData.city ||
+      !formData.state ||
+      !formData.postalCode
+    ) {
+      setOrderError("Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      setPlacingOrder(true);
+
+      // --------------------------------
+      // Only send important product data
+      // --------------------------------
+
+      const orderData = {
+        products: cartItems.map((item) => ({
+          product: item._id,
+          quantity: item.quantity,
+        })),
+
+        checkoutDetails: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          apartment: formData.apartment,
+          city: formData.city,
+          state: formData.state,
+          postalCode: formData.postalCode,
+        },
+
+        paymentMethod,
+      };
+
+      console.log("Order Request:", orderData);
+
+      const response = await api.post("/orders/place-order",
+        orderData
+      );
+
+      console.log("Order Response:", response.data);
+
+      if (response.data.success) {
+        // Clear cart
+        clearCart();
+
+        // Show success message
+        alert("Order placed successfully!");
+
+        // Redirect to orders page
+        navigate("/dashboard");
+      } else {
+        setOrderError(
+          response.data.message || "Failed to place order."
+        );
+      }
+    } catch (error) {
+      console.error("Place Order Error:", error);
+
+      if (error.response) {
+        setOrderError(
+          error.response.data?.message ||
+            "Failed to place order."
+        );
+      } else {
+        setOrderError(
+          "Unable to connect to the server. Please try again."
+        );
+      }
+    } finally {
+      setPlacingOrder(false);
+    }
   };
+
+  // --------------------------------
+  // Empty Cart
+  // --------------------------------
+
+  if (cartItems.length === 0) {
+    return (
+      <div className="checkout-page">
+        <div className="empty-cart">
+          <h2>Your cart is empty</h2>
+
+          <p>
+            Please add some products before proceeding to checkout.
+          </p>
+
+          <Link to="/products" className="btn-primary">
+            Continue Shopping
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="checkout-page">
 
-      {/* =====================================================
-          PAGE HEADER
-      ===================================================== */}
+      {/* =================================
+          Page Header
+      ================================= */}
 
-      <section className="checkout-page-header">
+      <div className="checkout-header">
+        <div className="container">
 
-        <div className="checkout-header-content">
+          <div className="breadcrumb">
+            <Link to="/">Home</Link>
 
-          <p className="section-subtitle">
-            SECURE CHECKOUT
-          </p>
+            <span>/</span>
+
+            <Link to="/cart">Cart</Link>
+
+            <span>/</span>
+
+            <span>Checkout</span>
+          </div>
 
           <h1>Checkout</h1>
 
-          <p>
-            Complete your information to place your order.
-          </p>
-
         </div>
+      </div>
 
-      </section>
 
+      {/* =================================
+          Checkout Content
+      ================================= */}
 
-      {/* =====================================================
-          CHECKOUT SECTION
-      ===================================================== */}
-
-      <section className="checkout-section">
+      <div className="container">
 
         <form
           className="checkout-layout"
           onSubmit={handleSubmit}
         >
 
-          {/* =================================================
+          {/* =================================
               LEFT SIDE
-          ================================================= */}
+          ================================= */}
 
-          <div className="checkout-form">
+          <div className="checkout-left">
 
+            {/* -------------------------------
+                Contact Information
+            -------------------------------- */}
 
-            {/* =============================================
-                CONTACT INFORMATION
-            ============================================= */}
+            <div className="checkout-section">
 
-            <div className="checkout-card">
+              <div className="section-header">
+                <h2>Contact Information</h2>
+              </div>
 
-              <div className="checkout-card-header">
+              <div className="form-group">
 
-                <span className="checkout-number">
-                  01
-                </span>
+                <label htmlFor="email">
+                  Email Address *
+                </label>
 
-                <div>
-                  <h2>Contact Information</h2>
-
-                  <p>
-                    How can we contact you?
-                  </p>
-                </div>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  required
+                />
 
               </div>
 
+              <div className="form-group">
 
-              <div className="form-grid">
+                <label htmlFor="phone">
+                  Phone Number *
+                </label>
+
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Enter your phone number"
+                  required
+                />
+
+              </div>
+
+            </div>
+
+
+            {/* =================================
+                Shipping Information
+            ================================= */}
+
+            <div className="checkout-section">
+
+              <div className="section-header">
+                <h2>Shipping Information</h2>
+              </div>
+
+
+              {/* First / Last Name */}
+
+              <div className="form-row">
 
                 <div className="form-group">
 
-                  <label>
-                    First Name
-                    <span>*</span>
+                  <label htmlFor="firstName">
+                    First Name *
                   </label>
 
                   <input
                     type="text"
+                    id="firstName"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    placeholder="Enter first name"
+                    placeholder="First name"
                     required
                   />
 
@@ -143,55 +312,17 @@ function Checkout() {
 
                 <div className="form-group">
 
-                  <label>
-                    Last Name
-                    <span>*</span>
+                  <label htmlFor="lastName">
+                    Last Name *
                   </label>
 
                   <input
                     type="text"
+                    id="lastName"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    placeholder="Enter last name"
-                    required
-                  />
-
-                </div>
-
-
-                <div className="form-group">
-
-                  <label>
-                    Email Address
-                    <span>*</span>
-                  </label>
-
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="you@example.com"
-                    required
-                  />
-
-                </div>
-
-
-                <div className="form-group">
-
-                  <label>
-                    Phone Number
-                    <span>*</span>
-                  </label>
-
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="+92 300 1234567"
+                    placeholder="Last name"
                     required
                   />
 
@@ -199,84 +330,65 @@ function Checkout() {
 
               </div>
 
-            </div>
 
+              {/* Address */}
 
-            {/* =============================================
-                SHIPPING INFORMATION
-            ============================================= */}
+              <div className="form-group">
 
-            <div className="checkout-card">
+                <label htmlFor="address">
+                  Address *
+                </label>
 
-              <div className="checkout-card-header">
-
-                <span className="checkout-number">
-                  02
-                </span>
-
-                <div>
-                  <h2>Shipping Address</h2>
-
-                  <p>
-                    Where should we deliver your order?
-                  </p>
-                </div>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="Street address"
+                  required
+                />
 
               </div>
 
 
-              <div className="form-grid">
+              {/* Apartment */}
 
-                <div className="form-group form-full">
+              <div className="form-group">
 
-                  <label>
-                    Street Address
-                    <span>*</span>
-                  </label>
+                <label htmlFor="apartment">
+                  Apartment, Suite, etc.
+                </label>
 
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleChange}
-                    placeholder="House number and street name"
-                    required
-                  />
+                <input
+                  type="text"
+                  id="apartment"
+                  name="apartment"
+                  value={formData.apartment}
+                  onChange={handleChange}
+                  placeholder="Apartment, suite, unit, etc."
+                />
 
-                </div>
+              </div>
 
 
-                <div className="form-group form-full">
+              {/* City / State */}
 
-                  <label>
-                    Apartment, Suite, etc.
-                    <small>(Optional)</small>
-                  </label>
-
-                  <input
-                    type="text"
-                    name="apartment"
-                    value={formData.apartment}
-                    onChange={handleChange}
-                    placeholder="Apartment, suite, unit, etc."
-                  />
-
-                </div>
-
+              <div className="form-row">
 
                 <div className="form-group">
 
-                  <label>
-                    City
-                    <span>*</span>
+                  <label htmlFor="city">
+                    City *
                   </label>
 
                   <input
                     type="text"
+                    id="city"
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    placeholder="Enter city"
+                    placeholder="City"
                     required
                   />
 
@@ -285,187 +397,169 @@ function Checkout() {
 
                 <div className="form-group">
 
-                  <label>
-                    State / Province
-                    <span>*</span>
+                  <label htmlFor="state">
+                    State *
                   </label>
 
                   <input
                     type="text"
+                    id="state"
                     name="state"
                     value={formData.state}
                     onChange={handleChange}
-                    placeholder="Enter state"
+                    placeholder="State"
                     required
                   />
 
                 </div>
 
+              </div>
 
-                <div className="form-group">
 
-                  <label>
-                    Postal Code
-                    <span>*</span>
-                  </label>
+              {/* Postal Code */}
 
-                  <input
-                    type="text"
-                    name="postalCode"
-                    value={formData.postalCode}
-                    onChange={handleChange}
-                    placeholder="Postal code"
-                    required
-                  />
+              <div className="form-group">
 
-                </div>
+                <label htmlFor="postalCode">
+                  Postal Code *
+                </label>
+
+                <input
+                  type="text"
+                  id="postalCode"
+                  name="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                  placeholder="Postal code"
+                  required
+                />
 
               </div>
 
             </div>
 
 
-            {/* =============================================
-                PAYMENT METHOD
-            ============================================= */}
+            {/* =================================
+                Payment Information
+            ================================= */}
 
-            <div className="checkout-card">
+            <div className="checkout-section">
 
-              <div className="checkout-card-header">
+              <div className="section-header">
+                <h2>Payment Method</h2>
+              </div>
 
-                <span className="checkout-number">
-                  03
-                </span>
 
-                <div>
-                  <h2>Payment Method</h2>
+              {/* -------------------------------
+                  Cash On Delivery
+              -------------------------------- */}
 
-                  <p>
-                    Choose your preferred payment method.
-                  </p>
+              <div
+                className={`payment-option ${
+                  paymentMethod === "cod"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  handlePaymentMethod("cod")
+                }
+              >
+
+                <div className="payment-option-header">
+
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="cod"
+                    checked={paymentMethod === "cod"}
+                    onChange={() =>
+                      handlePaymentMethod("cod")
+                    }
+                  />
+
+                  <div>
+                    <h3>Cash on Delivery</h3>
+
+                    <p>
+                      Pay when your order is delivered.
+                    </p>
+                  </div>
+
                 </div>
 
               </div>
 
 
-              <div className="payment-options">
+              {/* -------------------------------
+                  Card
+              -------------------------------- */}
 
+              <div
+                className={`payment-option ${
+                  paymentMethod === "card"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  handlePaymentMethod("card")
+                }
+              >
 
-                {/* COD */}
-
-                <label
-                  className={`payment-option ${
-                    paymentMethod === "cod"
-                      ? "selected"
-                      : ""
-                  }`}
-                >
-
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="cod"
-                    checked={paymentMethod === "cod"}
-                    onChange={(e) =>
-                      setPaymentMethod(e.target.value)
-                    }
-                  />
-
-                  <div className="payment-option-content">
-
-                    <div className="payment-icon">
-                      💵
-                    </div>
-
-                    <div>
-                      <strong>
-                        Cash on Delivery
-                      </strong>
-
-                      <p>
-                        Pay when your order arrives.
-                      </p>
-                    </div>
-
-                  </div>
-
-                </label>
-
-
-                {/* CARD */}
-
-                <label
-                  className={`payment-option ${
-                    paymentMethod === "card"
-                      ? "selected"
-                      : ""
-                  }`}
-                >
+                <div className="payment-option-header">
 
                   <input
                     type="radio"
-                    name="payment"
+                    name="paymentMethod"
                     value="card"
                     checked={paymentMethod === "card"}
-                    onChange={(e) =>
-                      setPaymentMethod(e.target.value)
+                    onChange={() =>
+                      handlePaymentMethod("card")
                     }
                   />
 
-                  <div className="payment-option-content">
+                  <div>
+                    <h3>Credit / Debit Card</h3>
 
-                    <div className="payment-icon">
-                      💳
-                    </div>
-
-                    <div>
-                      <strong>
-                        Credit / Debit Card
-                      </strong>
-
-                      <p>
-                        Secure online card payment.
-                      </p>
-                    </div>
-
+                    <p>
+                      Pay securely using your card.
+                    </p>
                   </div>
 
-                </label>
+                </div>
 
 
-                {/* CARD DETAILS */}
+                {/* Card UI */}
 
                 {paymentMethod === "card" && (
+                  <div className="card-payment-info">
 
-                  <div className="card-payment-details">
-
-                    <div className="form-group form-full">
+                    <div className="form-group">
 
                       <label>
                         Card Number
-                        <span>*</span>
                       </label>
 
                       <input
                         type="text"
-                        placeholder="1234 5678 9012 3456"
+                        placeholder="XXXX XXXX XXXX XXXX"
+                        disabled
                       />
 
                     </div>
 
 
-                    <div className="form-grid">
+                    <div className="form-row">
 
                       <div className="form-group">
 
                         <label>
                           Expiry Date
-                          <span>*</span>
                         </label>
 
                         <input
                           type="text"
-                          placeholder="MM / YY"
+                          placeholder="MM/YY"
+                          disabled
                         />
 
                       </div>
@@ -475,92 +569,116 @@ function Checkout() {
 
                         <label>
                           CVV
-                          <span>*</span>
                         </label>
 
                         <input
-                          type="text"
-                          placeholder="123"
+                          type="password"
+                          placeholder="CVV"
+                          disabled
                         />
 
                       </div>
 
                     </div>
 
-                  </div>
+                    <p className="payment-note">
+                      Card payments will be handled through a
+                      secure payment gateway.
+                    </p>
 
+                  </div>
                 )}
 
               </div>
 
             </div>
 
+
+            {/* =================================
+                Error Message
+            ================================= */}
+
+            {orderError && (
+              <div className="checkout-error">
+                {orderError}
+              </div>
+            )}
+
+
+            {/* =================================
+                Place Order
+            ================================= */}
+
+            <button
+              type="submit"
+              className="place-order-btn"
+              disabled={placingOrder}
+            >
+
+              {placingOrder
+                ? "Placing Order..."
+                : "Place Order"}
+
+            </button>
+
           </div>
 
 
-          {/* =================================================
+          {/* =================================
               RIGHT SIDE - ORDER SUMMARY
-          ================================================= */}
+          ================================= */}
 
-          <aside className="checkout-summary">
+          <div className="checkout-right">
 
-            <div className="checkout-summary-card">
+            <div className="order-summary">
 
-              <div className="checkout-summary-header">
-
-                <h2>Your Order</h2>
-
-                <Link to="/cart">
-                  Edit Cart
-                </Link>
-
-              </div>
+              <h2>Order Summary</h2>
 
 
-              {/* CART ITEMS */}
+              {/* -------------------------------
+                  Cart Items
+              -------------------------------- */}
 
-              <div className="checkout-items">
+              <div className="summary-items">
 
                 {cartItems.map((item) => (
 
                   <div
-                    className="checkout-item"
-                    key={item.id}
+                    className="summary-item"
+                    key={item._id}
                   >
 
-                    <div className="checkout-item-image">
+                    <div className="summary-item-image">
 
                       <img
                         src={item.image}
                         alt={item.name}
                       />
 
-                      <span>
+                      <span className="item-quantity">
                         {item.quantity}
                       </span>
 
                     </div>
 
 
-                    <div className="checkout-item-info">
+                    <div className="summary-item-details">
 
-                      <h3>
-                        {item.name}
-                      </h3>
+                      <h3>{item.name}</h3>
 
                       <p>
-                        ${item.price.toFixed(2)}
+                        {item.category?.name}
                       </p>
 
                     </div>
 
 
-                    <strong>
+                    <div className="summary-item-price">
+
                       $
-                      {(item.price * item.quantity).toFixed(
-                        2
-                      )}
-                    </strong>
+                      {(item.price * item.quantity).toFixed(2)}
+
+                    </div>
 
                   </div>
 
@@ -569,33 +687,49 @@ function Checkout() {
               </div>
 
 
-              {/* SUMMARY */}
+              {/* -------------------------------
+                  Price Summary
+              -------------------------------- */}
 
-              <div className="checkout-summary-details">
+              <div className="summary-calculation">
 
                 <div className="summary-row">
 
-                  <span>
-                    Subtotal
-                  </span>
+                  <span>Subtotal</span>
 
-                  <strong>
+                  <span>
                     ${subtotal.toFixed(2)}
-                  </strong>
+                  </span>
 
                 </div>
 
 
                 <div className="summary-row">
 
+                  <span>Shipping</span>
+
                   <span>
-                    Shipping
+                    {shipping === 0
+                      ? "Free"
+                      : `$${shipping.toFixed(2)}`}
                   </span>
 
+                </div>
+
+
+                {shipping === 0 && (
+                  <p className="free-shipping-message">
+                    You qualify for free shipping.
+                  </p>
+                )}
+
+
+                <div className="summary-total">
+
+                  <span>Total</span>
+
                   <strong>
-                    {shipping === 0
-                      ? "FREE"
-                      : `$${shipping.toFixed(2)}`}
+                    ${total.toFixed(2)}
                   </strong>
 
                 </div>
@@ -603,55 +737,27 @@ function Checkout() {
               </div>
 
 
-              <div className="summary-divider"></div>
+              {/* -------------------------------
+                  Back To Cart
+              -------------------------------- */}
 
-
-              <div className="checkout-total">
-
-                <span>
-                  Total
-                </span>
-
-                <strong>
-                  ${total.toFixed(2)}
-                </strong>
-
-              </div>
-
-
-              {/* PLACE ORDER */}
-
-              <button
-                type="submit"
-                className="place-order-button"
+              <Link
+                to="/cart"
+                className="back-to-cart"
               >
-                Place Order
-                <span>→</span>
-              </button>
-
-
-              <div className="checkout-security">
-
-                <span>🔒</span>
-
-                <p>
-                  Your payment and personal information
-                  are securely protected.
-                </p>
-
-              </div>
+                ← Back to Cart
+              </Link>
 
             </div>
 
-          </aside>
+          </div>
 
         </form>
 
-      </section>
+      </div>
 
     </div>
   );
 }
 
 export default Checkout;
-
