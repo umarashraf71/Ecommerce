@@ -6,7 +6,7 @@ const {
 } = require("../controllers/publicController.js");
 
 const router = express.Router();
-app.use("/health", (req, res) => {
+router.get("/health", (req, res) => {
   res.status(200).json({ message: "API is healthy" });
 });
 
