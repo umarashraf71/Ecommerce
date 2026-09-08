@@ -6,6 +6,7 @@ const {
   getCategoryById,
   updateCategory,
   deleteCategory,
+  updateCategoryStatus
 } = require("../controllers/categoryController");
 
 const router = express.Router();
@@ -30,5 +31,7 @@ router.put("/:id", updateCategory);
 // Delete category
 router.delete("/:id", deleteCategory);
 
+
+router.post("/updateStatus",updateCategoryStatus)
 
 module.exports = router;

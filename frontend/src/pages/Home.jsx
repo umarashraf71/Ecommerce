@@ -170,8 +170,6 @@ function Home() {
 
                 <div className="product-price">
                   <strong>${product.price}</strong>
-
-                  <span>${product.oldPrice}</span>
                 </div>
 
                 <button className="add-cart-button">

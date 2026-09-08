@@ -87,7 +87,7 @@ function Cart() {
                   <div className="cart-item-details">
 
                     <p className="cart-item-category">
-                      {item.category}
+                      {item.category ? item.category.name : "Uncategorized"}
                     </p>
 
                     <h3>{item.name}</h3>

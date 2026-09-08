@@ -18,8 +18,6 @@ function CategoryList() {
 
       const response = await api.get("/categories");
 
-      // console.log("Categories Response:", response.data);
-
       setCategories(response.data.categories);
 
     } catch (error) {
@@ -42,15 +40,79 @@ function CategoryList() {
   }, []);
 
 
+  // Activate / Deactivate Category
+  const handleStatusChange = async (id, currentStatus) => {
+
+    const newStatus = !currentStatus;
+
+    const action = newStatus ? "activate" : "deactivate";
+
+    if (
+      !window.confirm(
+        `Are you sure you want to ${action} this category?`
+      )
+    ) {
+      return;
+    }
+
+    try {
+
+      await api.post(`/categories/updateStatus`, {
+        status: newStatus,
+        id:id
+      });
+
+      // Update status in UI without fetching categories again
+      setCategories((prevCategories) =>
+        prevCategories.map((category) =>
+          category._id === id
+            ? { ...category, status: newStatus }
+            : category
+        )
+      );
+
+    } catch (error) {
+
+      console.log("Status Change Error:", error);
+
+      alert(
+        error.response?.data?.message ||
+        `Failed to ${action} category`
+      );
+    }
+  };
+
+
   // Delete Category
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
 
     if (
       window.confirm(
         "Are you sure you want to delete this category?"
       )
     ) {
-      console.log("Delete:", id);
+
+    try {
+
+      await api.delete(`/categories/${id}`);
+
+      // Update status in UI without fetching categories again
+      setCategories((prevCategories) =>
+        prevCategories.filter((category) =>
+          category._id !== id
+         )
+      );
+
+    } catch (error) {
+
+      console.log("Status Change Error:", error);
+
+      alert(
+        error.response?.data?.message ||
+        `Failed to ${action} category`
+      );
+    }
+
     }
 
   };
@@ -118,14 +180,29 @@ function CategoryList() {
                       {category.name}
                     </td>
 
+
+                    {/* Status */}
                     <td>
-                      {category.status}
+
+                      {category.status ? (
+                        <span className="status-active">
+                          Active
+                        </span>
+                      ) : (
+                        <span className="status-inactive">
+                          Inactive
+                        </span>
+                      )}
+
                     </td>
 
+
+                    {/* Actions */}
                     <td>
 
                       <div className="action-buttons">
 
+                        {/* Edit */}
                         <Link
                           to={`/dashboard/categories/edit/${category._id}`}
                           className="edit-btn"
@@ -134,6 +211,39 @@ function CategoryList() {
                         </Link>
 
 
+                        {/* Activate / Deactivate */}
+                        {category.status ? (
+
+                          <button
+                            className="deactivate-btn"
+                            onClick={() =>
+                              handleStatusChange(
+                                category._id,
+                                category.status
+                              )
+                            }
+                          >
+                            Deactivate
+                          </button>
+
+                        ) : (
+
+                          <button
+                            className="activate-btn"
+                            onClick={() =>
+                              handleStatusChange(
+                                category._id,
+                                category.status
+                              )
+                            }
+                          >
+                            Activate
+                          </button>
+
+                        )}
+
+
+                        {/* Delete */}
                         <button
                           className="delete-btn"
                           onClick={() =>
@@ -173,3 +283,4 @@ function CategoryList() {
 }
 
 export default CategoryList;
+

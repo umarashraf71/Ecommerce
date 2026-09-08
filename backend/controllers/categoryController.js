@@ -58,8 +58,7 @@ const createCategory = async (req, res) => {
 const getCategories = async (req, res) => {
   try {
 
-    const categories = await Category.find()
-      .sort({ _id: -1 });
+    const categories = await Category.find().sort({ _id: -1 });
 
 
     res.status(200).json({
@@ -122,6 +121,48 @@ const getCategoryById = async (req, res) => {
   }
 };
 
+
+const updateCategoryStatus = async (req, res) => {
+  try { 
+
+    const category = await Category.findById(req.body.id);
+    
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    category.status = req.body.status;
+    await category.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Category status updated successfully",
+      category,
+    });
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+      });
+    }
+    
+  }
+  catch (error) {
+
+    console.log(
+      "Update Category Status Error:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to update category status",
+      error: error.message,
+    });
+  }
+
+}
 
 
 // UPDATE CATEGORY
@@ -214,4 +255,5 @@ module.exports = {
   getCategoryById,
   updateCategory,
   deleteCategory,
+  updateCategoryStatus
 };
