@@ -27,6 +27,7 @@ app.use("/api/categories",authMiddleware,roleMiddleware("admin"), categoryRoutes
 app.use("/api/products",authMiddleware,roleMiddleware("admin"), productRoutes);
 app.use("/api/orders", orderRoutes);
 
+
 //public routes
 app.use("/api/public", publicRoutes);
 
